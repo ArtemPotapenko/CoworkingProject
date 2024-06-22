@@ -6,3 +6,4 @@
   mvn package
   java -jar target/CoworkingProject-1.0.jar 
   ```
+ДЗ1 https://github.com/ArtemPotapenko/CoworkingProject/pull/1
