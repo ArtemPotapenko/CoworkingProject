@@ -4,4 +4,5 @@
 #### Сборка и запуск
  ```
   mvn package
-  java -jar target/CoworkingProject-1.0.jar ```
+  java -jar target/CoworkingProject-1.0.jar 
+  ```

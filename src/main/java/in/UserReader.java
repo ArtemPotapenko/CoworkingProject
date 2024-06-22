@@ -70,7 +70,12 @@ public class UserReader {
 
     private UserReader() {
     }
-    private static final UserReader reader= new UserReader();
+    private static UserReader reader= new UserReader();
+
+    public static void setReader(UserReader reader) {
+        UserReader.reader = reader;
+    }
+
     public static UserReader getInstance(){
         return reader;
     }
