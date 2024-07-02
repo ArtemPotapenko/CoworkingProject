@@ -16,7 +16,7 @@ public class JBDCConnection {
     public JBDCConnection() {
         try {
             Properties prop = new Properties();
-            prop.load(new FileInputStream("C:\\Users\\potap\\IdeaProjects\\CoworkingProject\\src\\main\\resources\\jbdc.config"));
+            prop.load(new FileInputStream("resources/jbdc.config"));
             String URL = prop.getProperty("url");
             System.out.println(prop.getProperty("user"));
             connection = DriverManager.getConnection(URL,prop);

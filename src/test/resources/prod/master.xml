@@ -72,19 +72,4 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="ins_1" author="potap (generated)">
-        <comment>Add Spaces</comment>
-        <insert tableName="spaces">
-            <column name="name">Комната-1</column>
-        </insert>
-        <insert tableName="spaces">
-            <column name="name">Комната-2</column>
-        </insert>
-        <insert tableName="spaces">
-            <column name="name">Комната-3</column>
-        </insert>
-        <insert tableName="spaces">
-            <column name="name">Зал конференции</column>
-        </insert>
-    </changeSet>
 </databaseChangeLog>

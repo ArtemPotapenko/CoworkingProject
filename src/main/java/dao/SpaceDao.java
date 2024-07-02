@@ -25,9 +25,10 @@ public class SpaceDao {
      */
     public Space createSpace(Space space) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into users VALUES (nextval(space_seq),?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into spaces(name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, space.getName());
             preparedStatement.execute();
+            preparedStatement.getGeneratedKeys().next();
             space.setId(preparedStatement.getGeneratedKeys().getLong(1));
         } catch (
                 SQLException e) {

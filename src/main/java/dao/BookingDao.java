@@ -29,13 +29,14 @@ public class BookingDao {
      */
     public Booking createBooking(Booking booking) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into bookings VALUES (nextval(book_seq),?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into bookings(start_date, end_date, free, space_id, user_id) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setDate(1, new java.sql.Date(booking.getStartTime().getTime()));
             preparedStatement.setDate(2, new java.sql.Date(booking.getEndTime().getTime()));
             preparedStatement.setBoolean(3, booking.isFree());
             preparedStatement.setLong(4, booking.getSpace().getId());
-            preparedStatement.setLong(5, booking.getUser().getId());
+            preparedStatement.setLong(5, booking.getUser() == null ? 0 : booking.getUser().getId());
             preparedStatement.execute();
+            preparedStatement.getGeneratedKeys().next();
             booking.setId(preparedStatement.getGeneratedKeys().getLong(1));
         } catch (SQLException e) {
             throw new JDBCException("Ощибка создания бронирования");

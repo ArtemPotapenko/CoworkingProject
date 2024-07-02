@@ -30,10 +30,11 @@ public class UserDao {
             throw new UserAlreadyExistException();
         }
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into users VALUES (nextval(user_seq),?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into users(username, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1,user.getUsername());
             preparedStatement.setString(2, user.getEncodedPassword());
             preparedStatement.execute();
+            preparedStatement.getGeneratedKeys().next();
             user.setId(preparedStatement.getGeneratedKeys().getLong(1));
         } catch (
                 SQLException e) {
@@ -42,6 +43,13 @@ public class UserDao {
 
         return user;
     }
+
+    /**
+     * Получение user'a из ResultSet
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private User getUserByResultSet(ResultSet resultSet) throws SQLException {
         User user = new User(resultSet.getString("username"), resultSet.getString("password"));
         user.setId(resultSet.getLong("id"));
@@ -114,7 +122,7 @@ public class UserDao {
      */
     public Optional<User> getUserByUsername(String username) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE  ussername = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE  username = ?");
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
