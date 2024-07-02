@@ -1,102 +1,132 @@
 package dao;
 
 import dto.User;
+import exceptions.JDBCException;
 import exceptions.UserAlreadyExistException;
 import exceptions.UserNotFoundException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.*;
+import java.util.*;
 
 /**
  * CRUD для User
+ *
  * @author potap
  * @version 1.0
  */
 public class UserDao {
-    private final static Map<Long, User> users = new HashMap<>();
-    private final static Map<String, Long> index = new HashMap<>();
-    private long maxId = 0;
+    private final Connection connection = new JBDCConnection().getConnection();
 
     /**
      * Сохранение пользователя
+     *
      * @param user данные нового пользователя
      * @return Пользователь с новым id
      * @throws UserAlreadyExistException пользователь уже существует
-     *
-     *
      */
 
     public User createUser(User user) throws UserAlreadyExistException {
-        if (index.containsKey(user.getUsername())) {
+        if (getUserByUsername(user.getUsername()).isPresent()) {
             throw new UserAlreadyExistException();
         }
-        index.put(user.getUsername(), maxId + 1);
-        user.setId(maxId + 1);
-        users.put(maxId + 1, user);
-        maxId++;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into users VALUES (nextval(user_seq),?, ?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1,user.getUsername());
+            preparedStatement.setString(2, user.getEncodedPassword());
+            preparedStatement.execute();
+            user.setId(preparedStatement.getGeneratedKeys().getLong(1));
+        } catch (
+                SQLException e) {
+            throw new JDBCException("Ошибка создания пользователя");
+        }
+
         return user;
     }
-
+    private User getUserByResultSet(ResultSet resultSet) throws SQLException {
+        User user = new User(resultSet.getString("username"), resultSet.getString("password"));
+        user.setId(resultSet.getLong("id"));
+        return user;
+    }
     /**
      * Получить пользователя по id
+     *
      * @param id id пользователя
      * @return Найденный пользователь
-     *
      */
     public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable(users.get(id));
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE  id = ?");
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(getUserByResultSet(resultSet));
+            }
+            else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new JDBCException("Ошибка получения пользователя");
+        }
+
     }
 
     /**
      * Вывод всех пользователей
      */
     public List<User> getUsers() {
-        return users.values().stream().toList();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users;");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                users.add(getUserByResultSet(resultSet));
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * Удаление пользователя
+     *
      * @param id id пользователя
      * @return успешное/неуспешное удаление
-     *
      */
     public boolean deleteUser(Long id) {
-        if (!users.containsKey(id)) {
+        if (getUserById(id).isEmpty()){
             return false;
-        } else {
-            users.remove(id);
-            return true;
         }
+        try {
+            connection.createStatement().execute("DELETE FROM users WHERE id = " + id);
+        } catch (SQLException e) {
+            throw new JDBCException("Ошибка удаления пользователя");
+        }
+
+        return true;
     }
 
     /**
-     *  Получение пользователя по имени.
+     * Получение пользователя по имени.
+     *
      * @param username имя пользователя
      * @return пользователь
-     *
      */
     public Optional<User> getUserByUsername(String username) {
-        if (index.containsKey(username)) {
-            return Optional.ofNullable(users.get(index.get(username)));
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE  ussername = ?");
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(getUserByResultSet(resultSet));
+            }
+            else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            throw new JDBCException("Ошибка получения пользователя");
         }
-        return Optional.empty();
-    }
 
-    /**
-     * Обновление пользователя
-     * @param id Id
-     * @param user Пользователь с обновленными данными
-     * @return Обновленный пользователь из бд
-     */
-    public User updateUser(Long id, User user) throws UserNotFoundException {
-        if (users.containsKey(id)) {
-            users.put(id, user);
-            user.setId(id);
-            return user;
-        } else {
-            throw new UserNotFoundException();
-        }
+
     }
 }
