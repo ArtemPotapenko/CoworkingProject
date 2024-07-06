@@ -1,0 +1,90 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="potap (generated)" id="seq_1">
+        <createSequence cacheSize="371717"
+                        cycle="true"
+                        dataType="bigint"
+                        incrementBy="1"
+                        maxValue="10000"
+                        minValue="1"
+                        sequenceName="user_seq"
+                        startValue="1"
+        />
+    </changeSet>
+
+    <changeSet author="potap (generated)" id="seq_2">
+        <createSequence cacheSize="371717"
+                        cycle="true"
+                        dataType="bigint"
+                        incrementBy="1"
+                        maxValue="10000"
+                        minValue="1"
+                        sequenceName="space_seq"
+                        startValue="1"/>
+    </changeSet>
+
+    <changeSet author="potap (generated)" id="seq_3">
+        <createSequence cacheSize="371717"
+                        cycle="true"
+                        dataType="bigint"
+                        incrementBy="1"
+                        maxValue="10000"
+                        minValue="1"
+                        sequenceName="book_seq"
+                        startValue="1"/>
+    </changeSet>
+    <changeSet id="1" author="potap (generated)" >
+        <createTable tableName="users">
+            <column name="id" type="bigserial" >
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="potap (generated)">
+        <createTable tableName="spaces" >
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="potap (generated)">
+        <createTable tableName="bookings">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="start_date" type="datetime"/>
+            <column name="end_date" type="datetime"/>
+            <column name="free" type="boolean"/>
+            <column name="space_id" type="bigint">
+                <constraints foreignKeyName="space_id" references="spaces(id)"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="user_id" references="users(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="ins_1" author="potap (generated)">
+        <comment>Add Spaces</comment>
+        <insert tableName="spaces">
+            <column name="name">Комната-1</column>
+        </insert>
+        <insert tableName="spaces">
+            <column name="name">Комната-2</column>
+        </insert>
+        <insert tableName="spaces">
+            <column name="name">Комната-3</column>
+        </insert>
+        <insert tableName="spaces">
+            <column name="name">Зал конференции</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -3,9 +3,13 @@ package dao;
 import dto.Booking;
 import dto.Space;
 import dto.User;
+import exceptions.JDBCException;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Date;
+
 
 /**
  * CRUD для бронирований
@@ -14,8 +18,9 @@ import java.util.*;
  * @version 1.0
  */
 public class BookingDao {
-    private static Map<Long, Booking> map = new HashMap<>();
-    private static long maxId = 0;
+    private final SpaceDao spaceDao = new SpaceDao();
+    private final UserDao userDao = new UserDao();
+    private final Connection connection = new JBDCConnection().getConnection();
 
     /**
      * Создание бронирования
@@ -23,8 +28,27 @@ public class BookingDao {
      * @param booking бронирование
      */
     public Booking createBooking(Booking booking) {
-        map.put(++maxId, booking);
-        booking.setId(maxId);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into bookings(start_date, end_date, free, space_id, user_id) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setDate(1, new java.sql.Date(booking.getStartTime().getTime()));
+            preparedStatement.setDate(2, new java.sql.Date(booking.getEndTime().getTime()));
+            preparedStatement.setBoolean(3, booking.isFree());
+            preparedStatement.setLong(4, booking.getSpace().getId());
+            preparedStatement.setLong(5, booking.getUser() == null ? 0 : booking.getUser().getId());
+            preparedStatement.execute();
+            preparedStatement.getGeneratedKeys().next();
+            booking.setId(preparedStatement.getGeneratedKeys().getLong(1));
+        } catch (SQLException e) {
+            throw new JDBCException("Ощибка создания бронирования");
+        }
+        return booking;
+    }
+
+    private Booking getBookingByResultSet(ResultSet resultSet) throws SQLException {
+        Booking booking = new Booking(resultSet.getTime("start_time"), resultSet.getTime("start_time"), spaceDao.getSpaceById(resultSet.getLong("space_id")).orElse(null));
+        booking.setFree(resultSet.getBoolean("free"));
+        booking.setId(resultSet.getLong("id"));
+        booking.setUser(userDao.getUserById(resultSet.getLong("user_id")).orElse(null));
         return booking;
     }
 
@@ -34,7 +58,18 @@ public class BookingDao {
      * @param id id бронирования
      */
     public Optional<Booking> getBookingById(Long id) {
-        return Optional.ofNullable(map.get(id));
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM  Bookings where id = (?)");
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(getBookingByResultSet(resultSet));
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new JDBCException("Ошибка получения бронирования");
+        }
+
     }
 
     /**
@@ -43,7 +78,16 @@ public class BookingDao {
      * @return Список бронирований
      */
     public List<Booking> getBookings() {
-        return map.values().stream().toList();
+        try {
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM Bookings");
+            List<Booking> bookings = new ArrayList<>();
+            while (resultSet.next()) {
+                bookings.add(getBookingByResultSet(resultSet));
+            }
+            return bookings;
+        } catch (SQLException e) {
+            throw new JDBCException("Ошибка получения бронирования");
+        }
     }
 
     /**
@@ -53,7 +97,7 @@ public class BookingDao {
      * @return Список бронирований
      */
     public List<Booking> getBookingsByFree(boolean free) {
-        return map.values().stream().filter(x -> x.isFree() == free).toList();
+        return getBookings().stream().filter(x -> x.isFree() == free).toList();
     }
 
     /**
@@ -63,7 +107,7 @@ public class BookingDao {
      * @return Список бронирований
      */
     public List<Booking> getBookingsByUser(User user) {
-        return map.values().stream().filter(x -> !x.isFree() && x.getUser().equals(user)).toList();
+        return getBookings().stream().filter(x -> !x.isFree() && x.getUser().equals(user)).toList();
     }
 
     private boolean equalsDate(Date date1, Date date2) {
@@ -82,31 +126,36 @@ public class BookingDao {
      * @return Список бронирований
      */
     public List<Booking> getBookingByDate(Date date, boolean free) {
-        return map.values().stream().filter(x -> equalsDate(x.getStartTime(), date) && free == x.isFree()).toList();
+        return getBookings().stream().filter(x -> equalsDate(x.getStartTime(), date) && free == x.isFree()).toList();
     }
 
     /**
      * Найти бронирование по дате и месту
      *
      * @param space Место
-     * @param date Дата
+     * @param date  Дата
      * @return Нужное бронирование
      */
-    public Optional<Booking> getBookingBySpaceAndDate(Space space, Date date){
-        return map.values().stream().filter(x -> equalsDate(x.getStartTime(), date) && space == x.getSpace()).findFirst();
+    public Optional<Booking> getBookingBySpaceAndDate(Space space, Date date) {
+        return getBookings().stream().filter(x -> equalsDate(x.getStartTime(), date) && space == x.getSpace()).findFirst();
     }
 
     /**
      * Удалить бронирование
+     *
      * @param id
      * @return
      */
-    public boolean deleteBooking(Long id){
-        if (map.containsKey(id)){
-            map.remove(id);
+    public boolean deleteBooking(Long id) {
+        try {
+            if (getBookingById(id).isEmpty()) {
+                return false;
+            }
+            Statement statement = connection.createStatement();
+            statement.execute("DELETE FROM bookings WHERE id = " + id);
             return true;
-        }else {
-            return false;
+        } catch (SQLException e) {
+            throw new JDBCException("Ошибка удаления бронирования");
         }
     }
 }
