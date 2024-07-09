@@ -37,9 +37,9 @@
                         sequenceName="book_seq"
                         startValue="1"/>
     </changeSet>
-    <changeSet id="1" author="potap (generated)" >
+    <changeSet id="1" author="potap (generated)">
         <createTable tableName="users">
-            <column name="id" type="bigserial" >
+            <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
             <column name="username" type="varchar(255)">
@@ -49,7 +49,7 @@
         </createTable>
     </changeSet>
     <changeSet id="2" author="potap (generated)">
-        <createTable tableName="spaces" >
+        <createTable tableName="spaces">
             <column name="id" type="bigserial">
                 <constraints primaryKey="true"/>
             </column>
@@ -70,6 +70,19 @@
             <column name="user_id" type="bigint">
                 <constraints foreignKeyName="user_id" references="users(id)"/>
             </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="potap (generated)">
+        <createTable tableName="audits">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="command" type="varchar(255)"/>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="user_id" references="users(id)"/>
+            </column>
+            <column name="date" type="datetime"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

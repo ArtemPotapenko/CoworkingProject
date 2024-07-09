@@ -87,4 +87,17 @@
             <column name="name">Зал конференции</column>
         </insert>
     </changeSet>
+
+    <changeSet id="4" author="potap (generated)">
+        <createTable tableName="audits">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="command" type="varchar(255)"/>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="user_id" references="users(id)"/>
+            </column>
+            <column name="date" type="datetime"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

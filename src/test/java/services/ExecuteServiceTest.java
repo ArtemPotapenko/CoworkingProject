@@ -2,7 +2,6 @@ package services;
 
 import dto.User;
 import exceptions.ExitException;
-import in.UserReader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

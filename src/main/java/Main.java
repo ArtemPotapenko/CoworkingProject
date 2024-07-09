@@ -1,10 +1,4 @@
 import exceptions.ExitException;
-import in.AuthController;
-import in.CommandController;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class Main {
 

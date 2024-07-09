@@ -19,6 +19,7 @@ public class BookingService {
 
     /**
      * Бронирование
+     *
      * @param user
      * @param space
      * @param date
@@ -30,6 +31,7 @@ public class BookingService {
 
     /**
      * Бронирование
+     *
      * @param user
      * @param id
      * @throws BookingNotFoundException
@@ -37,19 +39,22 @@ public class BookingService {
     public void book(User user, Long id) throws BookingNotFoundException {
         bookingDao.getBookingById(id).orElseThrow(BookingNotFoundException::new).reserve(user);
     }
-    public Booking addBooking(Space space, Date startDate, Date endDate){
+
+    public Booking addBooking(Space space, Date startDate, Date endDate) {
         Booking booking = new Booking(startDate, endDate, space);
         space.addSlot(booking);
         return bookingDao.createBooking(booking);
     }
+
     public void removeBooking(Long id) throws BookingNotFoundException {
-        if (!bookingDao.deleteBooking(id)){
+        if (!bookingDao.deleteBooking(id)) {
             throw new BookingNotFoundException();
         }
     }
 
     /**
      * Получить свободные слоты
+     *
      * @return Доступные слоты
      */
     public List<Booking> getFreeBookings() {
@@ -65,8 +70,21 @@ public class BookingService {
     public List<Booking> getBookingsByUser(User user) {
         return bookingDao.getBookingsByUser(user);
     }
-    public void cancelBooking(Long id) throws BookingNotFoundException {
-        bookingDao.getBookingById(id).orElseThrow(BookingNotFoundException::new).cancel();
+
+    /**
+     * Отмена бронирования
+     *
+     * @param user Пользователь
+     * @param id id брони
+     * @throws BookingNotFoundException
+     */
+    public void cancelBooking(User user, Long id) throws BookingNotFoundException {
+        Booking booking = bookingDao.getBookingById(id).orElseThrow(BookingNotFoundException::new);
+        if (booking.getUser().equals(user)) {
+            booking.cancel();
+        }else {
+            throw new BookingNotFoundException();
+        }
     }
 
 
@@ -84,7 +102,7 @@ public class BookingService {
      * Найти бронирование по дате и месту
      *
      * @param space Место
-     * @param date Дата
+     * @param date  Дата
      * @return Нужное бронирование
      */
     public Booking getBookingBySpaceAndDate(Space space, Date date) throws BookingNotFoundException {
