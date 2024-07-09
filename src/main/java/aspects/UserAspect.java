@@ -20,14 +20,14 @@ public class UserAspect {
     /**
      * Срез для бронирования
      */
-    @Pointcut("public execution(services.BookingService.book)")
+    @Pointcut("public execution(services.BookingService.book(..))")
     public void bookPointcut() {
     }
 
     /**
      * Срез для отмены бронироавния
      */
-    @Pointcut("public execution(services.BookingService.cancelBooking(..)")
+    @Pointcut("public execution(services.BookingService.cancelBooking(..))")
     public void cancelPointcut() {
     }
 
