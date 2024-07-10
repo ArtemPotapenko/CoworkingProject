@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Сервлет для регистрации
+ */
 @WebServlet("auth/register")
 public class RegisterServlet extends HttpServlet {
     private final AuthorizationService authorizationService = new AuthorizationService();

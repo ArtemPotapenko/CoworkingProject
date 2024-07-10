@@ -24,7 +24,7 @@ import java.util.Scanner;
 public class LoginServlet extends HttpServlet {
     private final AuthorizationService authorizationService = new AuthorizationService();
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
        UserRequest userRequest = RequestReader.readRequest(req,UserRequest.class);
         try {
             req.getSession().setAttribute("user",authorizationService.login(userRequest.getUsername(),userRequest.getPassword()));
