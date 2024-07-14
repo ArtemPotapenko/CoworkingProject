@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class SpaceDaoTest {
-    private static SpaceDao dao;
+    private static SpaceDao dao = new SpaceDao();
 
     @Test
     @DisplayName("Добавить место")
