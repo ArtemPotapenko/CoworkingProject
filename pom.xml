@@ -21,6 +21,8 @@
         <javaee.version>4.0.1</javaee.version>
         <aspectj.version>1.14.0</aspectj.version>
         <jackson.vesrion>2.17.2</jackson.vesrion>
+        <spring.version>6.1.4</spring.version>
+        <jwt.version>0.9.1</jwt.version>
     </properties>
     <dependencies>
         <dependency>
@@ -56,6 +58,26 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${javaee.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.mojo</groupId>

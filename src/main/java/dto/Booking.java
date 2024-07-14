@@ -1,5 +1,6 @@
 package dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  * @version 1.0
  */
 @Data
+@JsonSerialize
 public class Booking {
 
     @EqualsAndHashCode.Exclude

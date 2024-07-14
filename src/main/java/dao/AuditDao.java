@@ -2,12 +2,14 @@ package dao;
 
 import dto.Audit;
 import exceptions.JDBCException;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 
 /**
  * Класс добавления
  */
+@Component
 public class AuditDao {
     private final Connection connection = new JBDCConnection().getConnection();
 

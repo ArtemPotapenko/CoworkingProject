@@ -5,6 +5,9 @@ import dto.Booking;
 import dto.Space;
 import dto.User;
 import exceptions.BookingNotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -14,8 +17,10 @@ import java.util.Optional;
 /**
  * Сервис для бронирований
  */
+@Service
+@AllArgsConstructor
 public class BookingService {
-    private final BookingDao bookingDao = new BookingDao();
+    private final BookingDao bookingDao;
 
     /**
      * Бронирование

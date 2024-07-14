@@ -1,5 +1,7 @@
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,12 +19,14 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
+@JsonSerialize
 public class Space {
 
     @EqualsAndHashCode.Exclude
     private Long id;
     private String name;
     @ToString.Exclude
+    @JsonIgnore
     private List<Booking> slots = new ArrayList<>();
 
     public Space(String name) {

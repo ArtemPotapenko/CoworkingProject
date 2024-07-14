@@ -1,5 +1,7 @@
 package dao;
 
+import org.springframework.stereotype.Component;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,7 +14,7 @@ public class JBDCConnection {
         return connection;
     }
 
-    private Connection connection;
+    private final Connection connection;
     public JBDCConnection() {
         try {
             Properties prop = new Properties();
