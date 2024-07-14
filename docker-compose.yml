@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ylab_postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=ylabdb
+      - POSTGRES_PASSWORD=dfgkm223
+      - POSTGRES_USER=user
+    ports:
+      - 5433:5432
+  test_posgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=ylabdb_test
+      - POSTGRES_PASSWORD=qwerty12345
+      - POSTGRES_USER=test_user
+    ports:
+      - 5434:5432
