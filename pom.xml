@@ -7,7 +7,7 @@
     <groupId>org.example</groupId>
     <artifactId>CoworkingProject</artifactId>
     <version>1.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -18,7 +18,7 @@
         <lombok.version>1.18.30</lombok.version>
         <mockito.version>5.11.0</mockito.version>
         <liquibase.version>4.28.0</liquibase.version>
-        <javaee.version>4.0.1</javaee.version>
+        <javaee.version>6.0.0</javaee.version>
         <aspectj.version>1.14.0</aspectj.version>
         <jackson.vesrion>2.17.2</jackson.vesrion>
         <spring.version>6.1.4</spring.version>
@@ -54,10 +54,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
             <version>${javaee.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

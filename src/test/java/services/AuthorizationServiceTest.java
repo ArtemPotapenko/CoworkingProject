@@ -1,5 +1,6 @@
 package services;
 
+import dao.UserDao;
 import dto.User;
 import exceptions.PasswordNotEqualsException;
 import exceptions.UserAlreadyExistException;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Base64;
 
 public class AuthorizationServiceTest {
-    static AuthorizationService authorizationService = new AuthorizationService();
+    static AuthorizationService authorizationService = new AuthorizationService(new UserDao());
 
 
     @Test

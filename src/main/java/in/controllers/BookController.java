@@ -12,8 +12,8 @@ import secret.JwtUtils;
 import services.BookingService;
 import services.SpaceService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Контролер для работы с бронированием
@@ -92,7 +92,7 @@ public class BookController {
             bookingService.addBooking(spaceService.getSpace(bookRequest.getSpaceId()),bookRequest.getStartDate(), bookRequest.getEndDate());
             return ResponseEntity.ok().build();
         } catch (SpaceNotFoundException e) {
-            return ResponseEntity.badRequest().body(new Massage("Место не найдено."))
+            return ResponseEntity.badRequest().body(new Massage("Место не найдено."));
         }
     }
 
