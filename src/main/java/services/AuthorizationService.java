@@ -5,6 +5,9 @@ import dto.User;
 import exceptions.PasswordNotEqualsException;
 import exceptions.UserAlreadyExistException;
 import exceptions.UserNotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 /**
@@ -13,8 +16,10 @@ import java.util.Base64;
  * @version 1.0
  *
  */
+@AllArgsConstructor
+@Service
 public class AuthorizationService {
-    private final UserDao userDao = new UserDao();
+    private final UserDao userDao;
 
     /**
      * @param username Имя пользователя

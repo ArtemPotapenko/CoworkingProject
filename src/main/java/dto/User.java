@@ -1,5 +1,6 @@
 package dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @AllArgsConstructor
+@JsonSerialize
 public class User {
     @EqualsAndHashCode.Exclude
     private Long id;

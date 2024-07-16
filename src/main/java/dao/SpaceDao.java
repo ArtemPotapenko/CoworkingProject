@@ -4,6 +4,7 @@ import dto.Space;
 import dto.User;
 import exceptions.JDBCException;
 import exceptions.UserNotFoundException;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.*;
@@ -14,6 +15,7 @@ import java.util.*;
  * @author potap
  * @version 1.0
  */
+@Component
 public class SpaceDao {
     private final Connection connection = new JBDCConnection().getConnection();
 

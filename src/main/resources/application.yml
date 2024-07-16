@@ -1,0 +1,11 @@
+spring:
+  sever:
+    port: 8080
+  data:
+    url: jdbc:postgresql://localhost:5433/ylabdb
+    password: dfgkm223
+    user: user
+jwt:
+  token:
+    secret: tokensecret
+    expired: 864000000

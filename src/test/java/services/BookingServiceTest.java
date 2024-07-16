@@ -1,9 +1,9 @@
 package services;
 
+import dao.BookingDao;
+import dao.UserDao;
 import dto.User;
-import exceptions.BookingNotFoundException;
-import exceptions.SpaceNotFoundException;
-import exceptions.UserAlreadyExistException;
+import exceptions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,8 +12,8 @@ import java.util.Date;
 
 public class BookingServiceTest {
     static SpaceService spaceService = new SpaceService();
-    static AuthorizationService userService = new AuthorizationService();
-    static BookingService bookingService = new BookingService();
+    static AuthorizationService userService = new AuthorizationService(new UserDao());
+    static BookingService bookingService = new BookingService(new BookingDao());
     static User user;
     @BeforeAll
     public static void init() throws SpaceNotFoundException, UserAlreadyExistException, BookingNotFoundException {
@@ -24,8 +24,8 @@ public class BookingServiceTest {
     }
 
     @Test
-    void cancelBook() throws BookingNotFoundException, SpaceNotFoundException, UserAlreadyExistException {
-        bookingService.cancelBooking(1L);
+    void cancelBook() throws BookingNotFoundException, SpaceNotFoundException, UserAlreadyExistException, UserNotFoundException, PasswordNotEqualsException {
+        bookingService.cancelBooking(userService.login("NewUser","123"),1L);
         Assertions.assertEquals(bookingService.getFreeBookings().size(), 1);
         bookingService.removeBooking(1L);
         Assertions.assertEquals(bookingService.getFreeBookings().size(), 0);

@@ -15,19 +15,20 @@ import java.util.Date;
 /**
  * Аспект для действий пользователя
  */
+
 @Aspect
 public class UserAspect {
     /**
      * Срез для бронирования
      */
-    @Pointcut("public execution(services.BookingService.book(..))")
+    @Pointcut("execution(public services.BookingService.book())")
     public void bookPointcut() {
     }
 
     /**
      * Срез для отмены бронироавния
      */
-    @Pointcut("public execution(services.BookingService.cancelBooking(..))")
+    @Pointcut("execution(public services.BookingService.cancelBooking())")
     public void cancelPointcut() {
     }
 

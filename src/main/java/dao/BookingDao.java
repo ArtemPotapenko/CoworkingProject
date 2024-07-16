@@ -4,6 +4,7 @@ import dto.Booking;
 import dto.Space;
 import dto.User;
 import exceptions.JDBCException;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.Date;
  * @author potap
  * @version 1.0
  */
+@Component
 public class BookingDao {
     private final SpaceDao spaceDao = new SpaceDao();
     private final UserDao userDao = new UserDao();
