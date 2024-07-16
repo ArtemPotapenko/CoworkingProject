@@ -25,7 +25,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 
 @WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
 public class AuthControllerTest {
     private MockMvc mockMvc;
 

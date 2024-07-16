@@ -23,6 +23,8 @@
         <jackson.vesrion>2.17.2</jackson.vesrion>
         <spring.version>6.1.4</spring.version>
         <jwt.version>0.9.1</jwt.version>
+        <mockmvc.version>5.5.0</mockmvc.version>
+        <swagger.version>2.3.0</swagger.version>
     </properties>
     <dependencies>
         <dependency>
@@ -54,9 +56,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-mock-mvc</artifactId>
-            <version>5.5.0</version>
+            <version>${mockmvc.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -93,12 +100,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.vesrion}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

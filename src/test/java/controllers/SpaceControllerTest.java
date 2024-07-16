@@ -29,7 +29,6 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
 public class SpaceControllerTest {
     private MockMvc mockMvc;
 
